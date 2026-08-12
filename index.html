@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مفتاح الدخول - Raqami</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: linear-gradient(160deg, #090d16 0%, #1a102f 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    color: #fff;
+  }
+  .card {
+    background: rgba(25, 20, 45, 0.85);
+    backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(168, 85, 247, 0.3);
+    border-radius: 24px;
+    max-width: 420px;
+    width: 100%;
+    padding: 36px 28px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(168, 85, 247, 0.2);
+  }
+  .icon-wrap {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7, #06b6d4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    box-shadow: 0 8px 24px rgba(168,85,247,0.4);
+    font-size: 32px;
+  }
+  h1 {
+    font-size: 22px;
+    color: #fff;
+    margin-bottom: 8px;
+  }
+  p.desc {
+    font-size: 14px;
+    color: #94a3b8;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+  .key-box {
+    background: rgba(15, 23, 42, 0.9);
+    border: 2px dashed #06b6d4;
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 24px;
+  }
+  .key-label {
+    font-size: 12px;
+    color: #a855f7;
+    margin-bottom: 6px;
+    font-weight: 600;
+  }
+  .key-value {
+    font-size: 26px;
+    font-family: monospace;
+    color: #22d3ee;
+    font-weight: bold;
+    letter-spacing: 3px;
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, #a855f7, #06b6d4);
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 15px;
+    border-radius: 14px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(6,182,212,0.3);
+    transition: transform 0.2s;
+  }
+  .btn:active { transform: scale(0.97); }
+  .fallback {
+    margin-top: 18px;
+    font-size: 12.5px;
+    color: #64748b;
+    line-height: 1.7;
+  }
+  .badge {
+    display: inline-block;
+    background: rgba(34, 197, 94, 0.15);
+    color: #4ade80;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 16px;
+    border: 1px solid rgba(34,197,94,0.3);
+  }
+  .badge.warn {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239,68,68,0.3);
+  }
+  .icon-wrap.warn {
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    box-shadow: 0 8px 24px rgba(239,68,68,0.4);
+  }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+
+  <!-- الحالة الأولى: تم التحقق أنه جاء عبر رابط الاختصار -->
+  <div class="card" id="verifiedCard">
+    <div class="icon-wrap">🔑</div>
+    <div class="badge">✅ تم التحقق بنجاح</div>
+    <h1>مفتاح الدخول الخاص بك</h1>
+    <p class="desc">
+      تم جلب المفتاح الآمن بنجاح. انسخه واستخدمه لتسجيل الدخول في تطبيق Raqami.
+    </p>
+
+    <div class="key-box">
+      <div class="key-label">مفتاح الوصول (نسخ)</div>
+      <div class="key-value" id="dailyKeyDisplay">جاري التحميل...</div>
+    </div>
+
+    <button class="btn" onclick="copyKey()">نسخ المفتاح والعودة للتطبيق</button>
+    <div style="margin-top: 12px;"></div>
+    <button class="btn" style="background: linear-gradient(135deg, #3b82f6, #1d4ed8);" onclick="goToApp()">فتح تطبيق Raqami</button>
+
+    <p class="fallback">
+      ملاحظة: هذا المفتاح صالح للاستخدام حتى يتم تحديثه من لوحة التحكم.
+    </p>
+  </div>
+
+  <!-- الحالة الثانية: دخل الصفحة مباشرة بدون رابط الاختصار -->
+  <div class="card hidden" id="notVerifiedCard">
+    <div class="icon-wrap warn">⚠️</div>
+    <div class="badge warn">⚠️ تنبيه أمني</div>
+    <h1>يجب الدخول عبر الرابط الصحيح</h1>
+    <p class="desc">
+      يبدو أنك فتحت هذه الصفحة مباشرة. للحصول على مفتاح الدخول، يرجى الضغط على زر "الحصول على مفتاح الدخول" من داخل تطبيق Raqami عبر رابط الاختصار.
+    </p>
+    <button class="btn" onclick="goToApp()">فتح تطبيق Raqami</button>
+  </div>
+
+<script>
+  var fetchedKey = "RQ-000000";
+  var appDeepLink = "raqami://unlock";
+
+  // جلب المفتاح عشوائياً من ملف key.json السحابي
+  fetch('key.json?t=' + new Date().getTime())
+    .then(response => response.json())
+    .then(data => {
+      if (data && data.activeKey) {
+        fetchedKey = data.activeKey;
+        document.getElementById("dailyKeyDisplay").innerText = fetchedKey;
+      } else {
+        document.getElementById("dailyKeyDisplay").innerText = "خطأ في الجلب";
+      }
+    })
+    .catch(error => {
+      document.getElementById("dailyKeyDisplay").innerText = "تعذر الاتصال";
+    });
+
+  function copyKey() {
+    navigator.clipboard.writeText(fetchedKey).then(function() {
+      alert("تم نسخ المفتاح بنجاح! سيتم العودة للتطبيق.");
+      window.location.href = appDeepLink;
+    }, function() {
+      prompt("انسخ المفتاح يدويًا:", fetchedKey);
+      window.location.href = appDeepLink;
+    });
+  }
+
+  function goToApp() {
+    window.location.href = appDeepLink;
+  }
+
+  // التحقق من الرابط المرجعي للتأكد أنه جاء عبر موقع الاختصار (مثل linkjust)
+  function cameFromShortener() {
+    var ref = document.referrer || "";
+    // إذا كنت تريد السماح المطلق أثناء التجربة ضع true، وللقفل الأمني ضع شرط الـ referrer
+    return ref.length > 0; // مثال: ref.indexOf("linkjust") !== -1 || ref.indexOf("yourdomain") !== -1
+  }
+
+  window.addEventListener("load", function () {
+    // للتجربة المباشرة متاح، ولتفعيل الحماية الكاملة استبدل true بـ cameFromShortener()
+    if (true /* cameFromShortener() */) {
+      document.getElementById("verifiedCard").classList.remove("hidden");
+      document.getElementById("notVerifiedCard").classList.add("hidden");
+    } else {
+      document.getElementById("verifiedCard").classList.add("hidden");
+      document.getElementById("notVerifiedCard").classList.remove("hidden");
+    }
+  });
+</script>
+
+</body>
+</html>
