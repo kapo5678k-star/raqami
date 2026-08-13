@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" oncontextmenu="return false;">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نظام الوصول الآمن - Raqami</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; -webkit-user-select: none; }
+  body {
+    font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+    background: linear-gradient(160deg, #030508 0%, #0a0514 100%);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    color: #fff;
+    overflow: hidden;
+  }
+  .card {
+    background: rgba(12, 10, 22, 0.96);
+    backdrop-filter: blur(30px);
+    border: 1px solid rgba(168, 85, 247, 0.3);
+    border-radius: 30px;
+    max-width: 450px;
+    width: 100%;
+    padding: 45px 35px;
+    text-align: center;
+    box-shadow: 0 0 60px rgba(168, 85, 247, 0.15);
+    position: relative;
+    z-index: 10;
+  }
+  .icon-wrap {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a855f7, #06b6d4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 25px;
+    box-shadow: 0 0 35px rgba(168, 85, 247, 0.5);
+    font-size: 40px;
+  }
+  h1 { font-size: 26px; margin-bottom: 15px; color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.3); }
+  p.desc { font-size: 15px; color: #94a3b8; line-height: 1.7; margin-bottom: 35px; }
+  .key-container {
+    background: #000;
+    border: 1px solid #06b6d4;
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 35px;
+    position: relative;
+  }
+  .key-label { font-size: 12px; color: #06b6d4; margin-bottom: 10px; font-weight: 800; letter-spacing: 2px; }
+  .key-value {
+    font-size: 34px;
+    font-family: 'monospace';
+    color: #fff;
+    font-weight: 900;
+    letter-spacing: 6px;
+    text-shadow: 0 0 20px rgba(6, 182, 212, 0.8);
+  }
+  .btn {
+    display: block;
+    width: 100%;
+    background: linear-gradient(90deg, #a855f7 0%, #06b6d4 100%);
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+    font-weight: 800;
+    padding: 18px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  .btn:hover { transform: scale(1.02); box-shadow: 0 0 30px rgba(168, 85, 247, 0.5); }
+  .hidden { display: none; }
+  .warn-box { border-color: #ef4444; }
+  .warn-icon { background: linear-gradient(135deg, #ef4444, #b91c1c); box-shadow: 0 0 30px rgba(239, 68, 68, 0.5); }
+</style>
+<script>
+  // فخ أدوات المطورين والتحليل (Debugger Trap)
+  (function() {
+    try {
+      var a = function() {return true;};
+      if (window.console && (console.firebug || console.table)) {
+        window.location.href = "about:blank";
+      }
+    } catch(e) {}
+  })();
+
+  document.onkeydown = function(e) {
+    if (e.keyCode == 123 || (e.ctrlKey && e.shiftKey && (e.keyCode == 73 || e.keyCode == 74 || e.keyCode == 67)) || (e.ctrlKey && e.keyCode == 85)) {
+      return false;
+    }
+  };
+
+  // تعمية معقدة ومشتتة (Control Flow Flattening & Fake Logic)
+  var _0x9f1a = [
+    String.fromCharCode(82, 81, 45), // "RQ-"
+    String.fromCharCode(82, 81, 95, 83, 69, 67, 85, 82, 69, 95, 50, 48, 50, 6, 95), // Salt part
+    "raqami_active_session"
+  ];
+
+  function _x1(n) {
+    var x = n * 31;
+    var dummy = x ^ 12345;
+    return (dummy ^ 12345) ^ 7;
+  }
+
+  function _x2(m) {
+    return (m + 13) * 17;
+  }
+
+  function _generate() {
+    var _d = new Date();
+    var _y = _d.getFullYear();
+    var _m = _d.getMonth() + 1;
+    var _da = _d.getDate();
+    
+    // حسابات وهمية لتضليل أي محلل آلي
+    var _dummyState = _x1(_y) + _x2(_m) - (_da * 3);
+    if (_dummyState === 999999) { return "ERROR"; }
+
+    var _s = (_y * 37) ^ (_m * 19) ^ (_da * 101);
+    var _t = "RQ_SECURE_2026_" + (_s + 2049);
+    
+    var _h = 5381;
+    for (var _i = 0; _i < _t.length; _i++) {
+      var _c = _t.charCodeAt(_i);
+      _h = ((_h << 5) + _h) ^ _c;
+      _h = _h & 0x7FFFFFFF; // Force positive 32-bit
+    }
+    
+    var _res = (_h % 900000) + 100000;
+    return _0x9f1a[0] + _res;
+  }
+
+  function _check() {
+    if (sessionStorage.getItem(_0x9f1a[2])) return false;
+    var r = document.referrer || "";
+    return r.indexOf("linkjust") !== -1;
+  }
+
+  window.onload = function() {
+    if (_check()) {
+      sessionStorage.setItem(_0x9f1a[2], "1");
+      document.getElementById("v").classList.remove("hidden");
+      document.getElementById("k").innerText = _generate();
+    } else {
+      document.getElementById("e").classList.remove("hidden");
+    }
+  };
+
+  function copyK() {
+    sessionStorage.removeItem(_0x9f1a[2]);
+    var k = document.getElementById("k").innerText;
+    navigator.clipboard.writeText(k).then(function() {
+      alert("تم نسخ المفتاح الآمن بنجاح!");
+      window.location.href = "raqami://unlock";
+    });
+  }
+</script>
+</head>
+<body>
+  <div class="card hidden" id="v">
+    <div class="icon-wrap">💎</div>
+    <h1>مفتاح الدخول المعتمد</h1>
+    <p class="desc">تم التحقق من هويتك بنجاح عبر نظام الحماية المتقدم.</p>
+    <div class="key-container">
+      <div class="key-label">SECURE ACCESS KEY</div>
+      <div id="k" class="key-value">------</div>
+    </div>
+    <button class="btn" onclick="copyK()">نسخ المفتاح وتنشيط التطبيق</button>
+  </div>
+
+  <div class="card hidden warn-box" id="e">
+    <div class="icon-wrap warn-icon">🚫</div>
+    <h1 style="color:#ef4444">تنبيه أمني / انتهاء الجلسة</h1>
+    <p class="desc">تم اكتشاف محاولة وصول غير مصرح بها أو تحديث للصفحة. يرجى العودة للتطبيق وفتح الرابط المختصر.</p>
+    <button class="btn" style="background:#1e1b4b;color:#fff" onclick="window.location.href='raqami://unlock'">العودة للتطبيق</button>
+  </div>
+</body>
+</html>
